@@ -126,9 +126,6 @@ export default function TabOneScreen() {
       <View style={styles.header}>
         <Text style={styles.headerText}>SHADOW // VAULT</Text>
         <View style={styles.syncContainer}>
-          <TouchableOpacity onPress={() => supabase.auth.signOut()} style={{ marginRight: 15 }}>
-            <Text style={[styles.syncText, { color: '#ff3333' }]}>[LOGOUT]</Text>
-          </TouchableOpacity>
           {syncing || loading ? (
             <ActivityIndicator size="small" color="#00ff41" />
           ) : (
