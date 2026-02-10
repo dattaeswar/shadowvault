@@ -1,50 +1,44 @@
-# Welcome to your Expo app 👋
+# Shadow Vault
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+**Shadow Vault** is a secure, cloud-based notes application built with **React Native (Expo)** and **Supabase**. It features a Cyberpunk/Hacker aesthetic with Neon Green accents and a "terminal" style interface.
 
-## Get started
+## Features
 
-1. Install dependencies
+-   **Secure Storage**: Secrets are stored in a Supabase PostgreSQL database.
+-   **Cyberpunk UI**: Dark mode interface with glowing neon effects.
+-   **Real-time Sync**: Secrets are fetched and updated in real-time (conceptually).
+-   **Cross-Platform**: Runs on Android, iOS, and Web.
 
-   ```bash
-   npm install
-   ```
+## Tech Stack
 
-2. Start the app
+-   **Frontend**: React Native, Expo, TypeScript
+-   **Backend**: Supabase (PostgreSQL)
+-   **Styling**: `StyleSheet` & `expo-linear-gradient`
+-   **Icons**: `lucide-react-native`
 
-   ```bash
-   npx expo start
-   ```
+## Setup & Installation
 
-In the output, you'll find options to open the app in a
+1.  **Clone the repository**:
+    ```bash
+    git clone https://github.com/dattaeswar/shadowvault.git
+    cd shadowvault
+    ```
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+2.  **Install dependencies**:
+    ```bash
+    npm install
+    ```
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+3.  **Supabase Setup**:
+    -   Create a new Supabase project.
+    -   Run the SQL script provided in `supabase_setup.sql` in your Supabase SQL Editor.
+    -   Update `app/(tabs)/index.tsx` with your `SUPABASE_URL` and `SUPABASE_ANON_KEY`.
 
-## Get a fresh project
+4.  **Run the App**:
+    ```bash
+    npx expo start
+    ```
 
-When you're ready, run:
+## License
 
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+MIT
