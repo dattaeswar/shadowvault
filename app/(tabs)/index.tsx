@@ -15,11 +15,20 @@ import {
 } from 'react-native';
 import 'react-native-url-polyfill/auto';
 
+import Auth from '../../components/Auth';
+
 // --- Configuration ---
 const SUPABASE_URL = 'https://hgfnpcgfqwqyllzhxlpw.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_GbUcHZvqAWqbaaOH4GTjSg_MQCekcLc';
 
-const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+  auth: {
+    storage: require('@react-native-async-storage/async-storage').default,
+    autoRefreshToken: true,
+    persistSession: true,
+    detectSessionInUrl: false,
+  },
+});
 
 // --- Types ---
 interface Secret {
@@ -30,6 +39,7 @@ interface Secret {
 }
 
 export default function TabOneScreen() {
+  const [session, setSession] = useState<any>(null);
   const [secrets, setSecrets] = useState<Secret[]>([]);
   const [loading, setLoading] = useState(true);
   const [title, setTitle] = useState('');
@@ -68,9 +78,12 @@ export default function TabOneScreen() {
 
     try {
       setSyncing(true);
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error('No user logged in');
+
       const { error } = await supabase
         .from('secrets')
-        .insert([{ title, value }]);
+        .insert([{ title, value, user_id: user.id }]);
 
       if (error) {
         throw error;
@@ -105,8 +118,22 @@ export default function TabOneScreen() {
   };
 
   useEffect(() => {
-    fetchSecrets();
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      if (session) fetchSecrets();
+      else setLoading(false);
+    });
+
+    supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+      if (session) fetchSecrets();
+      else setSecrets([]);
+    });
   }, []);
+
+  if (!session) {
+    return <Auth onLogin={() => { }} />;
+  }
 
   // --- UI Components ---
 
@@ -136,6 +163,9 @@ export default function TabOneScreen() {
       <View style={styles.header}>
         <Text style={styles.headerText}>SHADOW // VAULT</Text>
         <View style={styles.syncContainer}>
+          <TouchableOpacity onPress={() => supabase.auth.signOut()} style={{ marginRight: 15 }}>
+            <Text style={[styles.syncText, { color: '#ff3333' }]}>[LOGOUT]</Text>
+          </TouchableOpacity>
           {syncing || loading ? (
             <ActivityIndicator size="small" color="#00ff41" />
           ) : (
