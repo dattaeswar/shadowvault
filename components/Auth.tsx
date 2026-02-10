@@ -14,7 +14,7 @@ import {
     TouchableWithoutFeedback,
     View,
 } from 'react-native';
-import { supabase } from '../app/(tabs)/index'; // Importing supabase instance from index
+import { supabase } from '../lib/supabase';
 
 interface AuthProps {
     onLogin: () => void;

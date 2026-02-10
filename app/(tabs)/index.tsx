@@ -1,4 +1,3 @@
-import { createClient } from '@supabase/supabase-js';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Lock, Trash2 } from 'lucide-react-native';
 import React, { useEffect, useState } from 'react';
@@ -16,19 +15,7 @@ import {
 import 'react-native-url-polyfill/auto';
 
 import Auth from '../../components/Auth';
-
-// --- Configuration ---
-const SUPABASE_URL = 'https://hgfnpcgfqwqyllzhxlpw.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_GbUcHZvqAWqbaaOH4GTjSg_MQCekcLc';
-
-export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-  auth: {
-    storage: require('@react-native-async-storage/async-storage').default,
-    autoRefreshToken: true,
-    persistSession: true,
-    detectSessionInUrl: false,
-  },
-});
+import { supabase } from '../../lib/supabase';
 
 // --- Types ---
 interface Secret {
