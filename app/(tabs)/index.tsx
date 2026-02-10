@@ -14,7 +14,6 @@ import {
 } from 'react-native';
 import 'react-native-url-polyfill/auto';
 
-import Auth from '../../components/Auth';
 import { supabase } from '../../lib/supabase';
 
 // --- Types ---
@@ -26,7 +25,6 @@ interface Secret {
 }
 
 export default function TabOneScreen() {
-  const [session, setSession] = useState<any>(null);
   const [secrets, setSecrets] = useState<Secret[]>([]);
   const [loading, setLoading] = useState(true);
   const [title, setTitle] = useState('');
@@ -43,13 +41,8 @@ export default function TabOneScreen() {
         .select('*')
         .order('id', { ascending: false });
 
-      if (error) {
-        throw error;
-      }
-
-      if (data) {
-        setSecrets(data);
-      }
+      if (error) throw error;
+      if (data) setSecrets(data);
     } catch (error: any) {
       Alert.alert('Error', error.message);
     } finally {
@@ -72,13 +65,11 @@ export default function TabOneScreen() {
         .from('secrets')
         .insert([{ title, value, user_id: user.id }]);
 
-      if (error) {
-        throw error;
-      }
+      if (error) throw error;
 
       setTitle('');
       setValue('');
-      await fetchSecrets(); // Reload list
+      await fetchSecrets();
     } catch (error: any) {
       Alert.alert('Error', error.message);
     } finally {
@@ -95,8 +86,7 @@ export default function TabOneScreen() {
         .eq('id', id);
 
       if (error) throw error;
-
-      await fetchSecrets(); // Reload list
+      await fetchSecrets();
     } catch (error: any) {
       Alert.alert('Error', error.message);
     } finally {
@@ -105,22 +95,8 @@ export default function TabOneScreen() {
   };
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      if (session) fetchSecrets();
-      else setLoading(false);
-    });
-
-    supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-      if (session) fetchSecrets();
-      else setSecrets([]);
-    });
+    fetchSecrets();
   }, []);
-
-  if (!session) {
-    return <Auth onLogin={() => { }} />;
-  }
 
   // --- UI Components ---
 
