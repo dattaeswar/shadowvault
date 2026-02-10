@@ -37,6 +37,9 @@ export default function Auth({ onLogin }: AuthProps) {
                 const { error } = await supabase.auth.signUp({
                     email,
                     password,
+                    options: {
+                        emailRedirectTo: 'https://shadow-vault-two.vercel.app',
+                    },
                 });
                 if (error) throw error;
                 // Show success banner and switch to login
