@@ -4,15 +4,13 @@ import React, { useState } from 'react';
 import {
     ActivityIndicator,
     Alert,
-    Keyboard,
     KeyboardAvoidingView,
     Platform,
     StyleSheet,
     Text,
     TextInput,
     TouchableOpacity,
-    TouchableWithoutFeedback,
-    View,
+    View
 } from 'react-native';
 import { supabase } from '../lib/supabase';
 
@@ -61,77 +59,75 @@ export default function Auth({ onLogin }: AuthProps) {
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             style={styles.container}
         >
-            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                <View style={styles.inner}>
-                    <View style={styles.header}>
-                        <LinearGradient
-                            colors={['#00ff41', 'transparent']}
-                            style={styles.logoGlow}
-                        />
-                        <Lock size={60} color="#00ff41" style={styles.logoIcon} />
-                        <Text style={styles.title}>SHADOW // NET</Text>
-                        <Text style={styles.subtitle}>SECURE_ACCESS_TERMINAL</Text>
-                    </View>
-
-                    <View style={styles.form}>
-                        <View style={styles.inputContainer}>
-                            <Mail size={20} color="#00ff41" style={styles.inputIcon} />
-                            <TextInput
-                                style={styles.input}
-                                placeholder="AGENT_ID (EMAIL)"
-                                placeholderTextColor="#444"
-                                value={email}
-                                onChangeText={setEmail}
-                                autoCapitalize="none"
-                                keyboardType="email-address"
-                            />
-                        </View>
-
-                        <View style={styles.inputContainer}>
-                            <Lock size={20} color="#00ff41" style={styles.inputIcon} />
-                            <TextInput
-                                style={styles.input}
-                                placeholder="ACCESS_CODE (PASSWORD)"
-                                placeholderTextColor="#444"
-                                value={password}
-                                onChangeText={setPassword}
-                                secureTextEntry
-                            />
-                        </View>
-
-                        <TouchableOpacity onPress={handleAuth} activeOpacity={0.8} disabled={loading}>
-                            <LinearGradient
-                                colors={['#00ff41', '#009926']}
-                                start={{ x: 0, y: 0 }}
-                                end={{ x: 1, y: 0 }}
-                                style={styles.button}
-                            >
-                                {loading ? (
-                                    <ActivityIndicator color="black" />
-                                ) : (
-                                    <>
-                                        <Text style={styles.buttonText}>
-                                            {isSignUp ? 'INITIATE_UPLINK' : 'ENTER_MATRIX'}
-                                        </Text>
-                                        <ArrowRight size={20} color="black" />
-                                    </>
-                                )}
-                            </LinearGradient>
-                        </TouchableOpacity>
-
-                        <TouchableOpacity
-                            onPress={() => setIsSignUp(!isSignUp)}
-                            style={styles.switchButton}
-                        >
-                            <Text style={styles.switchText}>
-                                {isSignUp
-                                    ? '[ ALREADY_HAVE_ACCESS? LOGIN ]'
-                                    : '[ NEW_OPERATIVE? SIGN_UP ]'}
-                            </Text>
-                        </TouchableOpacity>
-                    </View>
+            <View style={styles.inner}>
+                <View style={styles.header}>
+                    <LinearGradient
+                        colors={['#00ff41', 'transparent']}
+                        style={styles.logoGlow}
+                    />
+                    <Lock size={60} color="#00ff41" style={styles.logoIcon} />
+                    <Text style={styles.title}>SHADOW // NET</Text>
+                    <Text style={styles.subtitle}>SECURE_ACCESS_TERMINAL</Text>
                 </View>
-            </TouchableWithoutFeedback>
+
+                <View style={styles.form}>
+                    <View style={styles.inputContainer}>
+                        <Mail size={20} color="#00ff41" style={styles.inputIcon} />
+                        <TextInput
+                            style={styles.input}
+                            placeholder="AGENT_ID (EMAIL)"
+                            placeholderTextColor="#444"
+                            value={email}
+                            onChangeText={setEmail}
+                            autoCapitalize="none"
+                            keyboardType="email-address"
+                        />
+                    </View>
+
+                    <View style={styles.inputContainer}>
+                        <Lock size={20} color="#00ff41" style={styles.inputIcon} />
+                        <TextInput
+                            style={styles.input}
+                            placeholder="ACCESS_CODE (PASSWORD)"
+                            placeholderTextColor="#444"
+                            value={password}
+                            onChangeText={setPassword}
+                            secureTextEntry
+                        />
+                    </View>
+
+                    <TouchableOpacity onPress={handleAuth} activeOpacity={0.8} disabled={loading}>
+                        <LinearGradient
+                            colors={['#00ff41', '#009926']}
+                            start={{ x: 0, y: 0 }}
+                            end={{ x: 1, y: 0 }}
+                            style={styles.button}
+                        >
+                            {loading ? (
+                                <ActivityIndicator color="black" />
+                            ) : (
+                                <>
+                                    <Text style={styles.buttonText}>
+                                        {isSignUp ? 'INITIATE_UPLINK' : 'ENTER_MATRIX'}
+                                    </Text>
+                                    <ArrowRight size={20} color="black" />
+                                </>
+                            )}
+                        </LinearGradient>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        onPress={() => setIsSignUp(!isSignUp)}
+                        style={styles.switchButton}
+                    >
+                        <Text style={styles.switchText}>
+                            {isSignUp
+                                ? '[ ALREADY_HAVE_ACCESS? LOGIN ]'
+                                : '[ NEW_OPERATIVE? SIGN_UP ]'}
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
         </KeyboardAvoidingView>
     );
 }
