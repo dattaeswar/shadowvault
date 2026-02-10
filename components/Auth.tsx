@@ -23,10 +23,11 @@ export default function Auth({ onLogin }: AuthProps) {
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const [isSignUp, setIsSignUp] = useState(false);
+    const [signUpSuccess, setSignUpSuccess] = useState(false);
 
     const handleAuth = async () => {
         if (!email || !password) {
-            Alert.alert('Error', 'Please enter both email and password.');
+            Alert.alert('ACCESS_DENIED', 'Both AGENT_ID and ACCESS_CODE are required.');
             return;
         }
 
@@ -38,7 +39,9 @@ export default function Auth({ onLogin }: AuthProps) {
                     password,
                 });
                 if (error) throw error;
-                Alert.alert('Success', 'Check your email for the confirmation link!');
+                // Show success banner and switch to login
+                setSignUpSuccess(true);
+                setIsSignUp(false);
             } else {
                 const { error } = await supabase.auth.signInWithPassword({
                     email,
@@ -48,7 +51,7 @@ export default function Auth({ onLogin }: AuthProps) {
                 onLogin();
             }
         } catch (error: any) {
-            Alert.alert('Error', error.message);
+            Alert.alert('SYSTEM_ERROR', error.message);
         } finally {
             setLoading(false);
         }
@@ -69,6 +72,17 @@ export default function Auth({ onLogin }: AuthProps) {
                     <Text style={styles.title}>SHADOW // NET</Text>
                     <Text style={styles.subtitle}>SECURE_ACCESS_TERMINAL</Text>
                 </View>
+
+                {signUpSuccess && (
+                    <View style={styles.successBanner}>
+                        <Text style={styles.successIcon}>✓ UPLINK_ESTABLISHED</Text>
+                        <Text style={styles.successText}>
+                            A verification link has been sent to your email.{'\n'}
+                            Please verify your account, then return here and{'\n'}
+                            login with the same credentials.
+                        </Text>
+                    </View>
+                )}
 
                 <View style={styles.form}>
                     <View style={styles.inputContainer}>
@@ -117,7 +131,10 @@ export default function Auth({ onLogin }: AuthProps) {
                     </TouchableOpacity>
 
                     <TouchableOpacity
-                        onPress={() => setIsSignUp(!isSignUp)}
+                        onPress={() => {
+                            setIsSignUp(!isSignUp);
+                            setSignUpSuccess(false);
+                        }}
                         style={styles.switchButton}
                     >
                         <Text style={styles.switchText}>
@@ -232,5 +249,26 @@ const styles = StyleSheet.create({
         color: '#666',
         fontFamily: 'Courier',
         fontSize: 12,
+    },
+    successBanner: {
+        backgroundColor: 'rgba(0, 255, 65, 0.08)',
+        borderWidth: 1,
+        borderColor: '#00ff41',
+        borderRadius: 4,
+        padding: 16,
+        marginBottom: 24,
+    },
+    successIcon: {
+        color: '#00ff41',
+        fontFamily: 'Courier',
+        fontWeight: 'bold',
+        fontSize: 16,
+        marginBottom: 8,
+    },
+    successText: {
+        color: '#aaa',
+        fontFamily: 'Courier',
+        fontSize: 13,
+        lineHeight: 20,
     },
 });
